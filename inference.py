@@ -60,6 +60,17 @@ def parse_args() -> argparse.Namespace:
         "--metadata_wise",
         help="Set metadata-wise component.",
         action="store_true"
+    )    
+    parser.add_argument(
+        "--use_local_model",
+        help="use local model for querying.",
+        action="store_true"
+    )
+    parser.add_argument(
+        "--local_model_port", 
+        type=int, 
+        default=5000,
+        help="The local port used to run the model, by default 5000", 
     )
     parser.add_argument(
         "--data_parsing",
@@ -76,7 +87,7 @@ def parse_args() -> argparse.Namespace:
         "--api_key", 
         type=str, 
         help="The OpenAI API uses API keys for authentication.", 
-        required=True
+        required=False
     )
     parser.add_argument("--temperature", type=float, help="Temperature.", default=0.0)
     parser.add_argument("--max_tokens", type=int, help="Max tokens to generate.", default=100)
@@ -88,7 +99,10 @@ def main():
     args = parse_args()
     
     # Set api args
-    os.environ["OPENAI_API_KEY"] = args.api_key
+    if args.api_key:
+        os.environ["OPENAI_API_KEY"] = args.api_key
+    if not args.api_key and not args.use_local_model:
+        raise Exception("You have to either pass an OpenAI key or set use a local model flag and run against such model")
     dataset_name = args.data_dir.split('/')[-1]
     setup_logger(os.path.join(args.output_dir, dataset_name))
     logger.info(json.dumps(vars(args), indent=4))

@@ -16,16 +16,29 @@ class UniDM():
         self.Data_Parsing = args.data_parsing
         self.Prompt_Engineering = args.prompt_engineering
         self.logger = logger
-        self.manifest = Manifest(
-            client_name='openai',
-            cache_name='sqlite',
-            cache_connection='unifdt.sqlite',
-            stop_token='\n',
-            temperature=args.temperature,
-            max_tokens=args.max_tokens,
-            top_p=1.0,
-            n=1,
-        )
+        if args.use_local_model:
+            self.manifest = Manifest(
+                client_name = "huggingface",
+                client_connection = f"http://127.0.0.1:{args.local_model_port}",
+                cache_name='sqlite',
+                cache_connection='unifdt.sqlite',
+                # stop_token='\n',
+                # temperature=args.temperature,
+                # max_tokens=args.max_tokens,
+                top_p=1.0,
+                n=1,
+            )
+        else:
+            self.manifest = Manifest(
+                client_name='openai',
+                cache_name='sqlite',
+                cache_connection='unifdt.sqlite',
+                stop_token='\n',
+                temperature=args.temperature,
+                max_tokens=args.max_tokens,
+                top_p=1.0,
+                n=1,
+            )
 
         self.p_as = []
         self.score_table = []

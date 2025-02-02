@@ -10,7 +10,7 @@ class UniDM_EntityResolution(UniDM):
     def __init__(self, args, logger):
         super().__init__(args, logger)
         self.dataset_name = args.data_dir.split('/')[-1]
-        prod_name = MATCH_PROD_NAME[dataset_name]
+        prod_name = MATCH_PROD_NAME[self.dataset_name]
         self.prompt_dp = f"Given the items and convert the them into a textual format in a logical order.\n The items are %s.\n The {prod_name} is "
         self.pe_suffix = f"Do {prod_name} A and {prod_name} B describe the same entity? Yes or No. "
         self.template = f"The {prod_name} A is %s The {prod_name} B is %s"

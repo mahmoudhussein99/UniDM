@@ -1,6 +1,6 @@
 from model.unidm_di import UniDM_DataImputation
 from model.unidm_dt import UniDM_DataTransformation
-from model.unidm_em import UniDM_EntityResolution
+from model.unidm_er import UniDM_EntityResolution
 
 
 def build_model(args, logger):
