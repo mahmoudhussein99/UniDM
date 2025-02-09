@@ -89,7 +89,38 @@ def serialize_error_detection(
     column_map = {row["col_name"]: row["col_name"]}
     res = f"{entire_row}\n\nIs there an error in {serialize_row(row, column_map, sep_tok, nan_tok)}"
     return res
+def read_wdc_pairs(
+    split_path: str,
+    sep_tok: str,
+    nan_tok: str,  
+) -> pd.DataFrame:
+    columns =['id','title','description','brand']
+    column_mapA = {f"{c}_A": c for c in columns if c != "id"}
+    column_mapB = {f"{c}_B": c for c in columns if c != "id"}
+    merged = pd.read_csv(split_path,index_col=False,encoding='utf-8')
 
+    merged["serialized_A"] = merged.apply(
+        lambda row: serialize_row(
+            row,
+            column_mapA,
+            sep_tok,
+            nan_tok,
+        ),
+        axis=1,
+    )
+    merged["serialized_B"] = merged.apply(
+        lambda row: serialize_row(
+            row,
+            column_mapB,
+            sep_tok,
+            nan_tok,
+        ),
+        axis=1,
+    )
+    merged["label_str"] = merged.apply(
+        lambda row: "Yes\n" if row["label"] == 1 else "No\n", axis=1
+    )
+    return merged
 
 def read_blocked_pairs(
     split_path: str,
@@ -219,6 +250,7 @@ def read_raw_data(
 ):
     """Read in data where each directory is unique for a task."""
     dataset_name = data_dir.split('/')[-1]
+    is_wdc= dataset_name.split('-')[0]=='WDC'
     data_files_sep = {"test": {}, "train": {}, "validation": {}}
     logger.info(f"Processing {dataset_name}")
 
@@ -229,22 +261,28 @@ def read_raw_data(
         train_file = data_dir_p / "train.csv"
         valid_file = data_dir_p / "valid.csv"
         test_file = data_dir_p / "test.csv"
-        tableA_file = data_dir_p / "tableA.csv"
-        tableB_file = data_dir_p / "tableB.csv"
-
-        tableA = pd.read_csv(tableA_file)
-        tableB = pd.read_csv(tableB_file)
-
         label_col = "label"
-        read_data_func = partial(
-            read_blocked_pairs,
-            tableA=tableA,
-            tableB=tableB,
-            cols_to_drop=cols_to_drop,
-            col_renaming=col_renaming,            
-            sep_tok=sep_tok,
-            nan_tok=nan_tok,
-        )
+        if is_wdc:
+            read_data_func=partial(
+                read_wdc_pairs,
+                sep_tok=sep_tok,
+                nan_tok=nan_tok,
+            )
+        else:
+            tableA_file = data_dir_p / "tableA.csv"
+            tableB_file = data_dir_p / "tableB.csv"
+            tableA = pd.read_csv(tableA_file)
+            tableB = pd.read_csv(tableB_file)
+
+            read_data_func = partial(
+                read_blocked_pairs,
+                tableA=tableA,
+                tableB=tableB,
+                cols_to_drop=cols_to_drop,
+                col_renaming=col_renaming,            
+                sep_tok=sep_tok,
+                nan_tok=nan_tok,
+            )
     elif task == "data_imputation":
         train_file = data_dir_p / "train.csv"
         valid_file = data_dir_p / "valid.csv"

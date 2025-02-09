@@ -57,7 +57,19 @@ def parse_args() -> argparse.Namespace:
         default=3
     )    
     parser.add_argument(
+        "--num_self_consistency",
+        type=int,
+        help="The number of instances to sample from.",
+        default=3
+    )    
+    parser.add_argument(
         "--metadata_wise",
+        help="Set metadata-wise component.",
+        action="store_true"
+    )    
+    
+    parser.add_argument(
+        "--use_chain_of_thoughts",
         help="Set metadata-wise component.",
         action="store_true"
     )    
