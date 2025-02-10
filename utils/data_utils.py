@@ -3,6 +3,7 @@
 import logging, os
 from functools import partial
 from pathlib import Path
+import re
 from typing import Dict, List
 import pandas as pd
 
@@ -10,6 +11,35 @@ from . import constants
 
 logger = logging.getLogger(__name__)
 
+def count_words(text):
+    """
+    Counts the number of words in a given text.
+    
+    Args:
+    text (str): The input text.
+    
+    Returns:
+    int: The number of words in the text.
+    """
+    words = re.findall(r'\b\w+\b', text)  # Extract words using regex
+    return len(words)
+def clean_text(text):
+    """
+    Cleans a given text by removing unnecessary spaces and special characters (optional).
+    
+    Args:
+    text (str): The input text to be cleaned.
+    
+    Returns:
+    str: The cleaned text.
+    """
+    text = text.strip()  # Remove leading and trailing spaces
+    text = re.sub(r'\s+', ' ', text)  # Replace multiple spaces with a single space
+    
+    # Optional: Remove special characters (uncomment if needed)
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)  
+    
+    return text
 
 def sample_train_data(train: pd.DataFrame, n_rows: int):
     res = train.sample(n_rows)

@@ -16,14 +16,16 @@ do
     --use_local_model \
     --data_dir dataset/datasets/entity_matching/structured/$DATASET \
     --task entity_resolution \
-    --instance_num 3 \
-    --context_num 3 \
+    --instance_num 1 \
+    --context_num 1 \
     --metadata_wise \
     --instance_wise \
+    --use_chain_of_thoughts_llm \
     --prompt_engineering
-    # --use_chain_of_thoughts \
-
     # --data_parsing \
+    # --max_tokens 100 \
+    # --use_chain_of_thoughts_spacy \
+
     
 done
 

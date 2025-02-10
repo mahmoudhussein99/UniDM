@@ -69,7 +69,12 @@ def parse_args() -> argparse.Namespace:
     )    
     
     parser.add_argument(
-        "--use_chain_of_thoughts",
+        "--use_chain_of_thoughts_llm",
+        help="Set metadata-wise component.",
+        action="store_true"
+    )    
+    parser.add_argument(
+        "--use_chain_of_thoughts_spacy",
         help="Set metadata-wise component.",
         action="store_true"
     )    
@@ -83,6 +88,13 @@ def parse_args() -> argparse.Namespace:
         type=int, 
         default=5000,
         help="The local port used to run the model, by default 5000", 
+    )
+    
+    parser.add_argument(
+        "--local_model_port_dp", 
+        type=int, 
+        default=5001,
+        help="The local port used to run the model for dp, by default 5001", 
     )
     parser.add_argument(
         "--data_parsing",

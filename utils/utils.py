@@ -29,6 +29,7 @@ def compute_metrics(preds: List, golds: List, task: str):
         if task in {"data_imputation"} or task in {"data_transformation"}:
             crc = pred == label
         elif task in {"entity_resolution"}:
+            pred = pred.split("\n")[0]
             pred = "yes" if "yes" in pred else "no"
             crc = pred == label
         elif task in {"entity_resolution", "schema_matching", "error_detection_spelling"}:

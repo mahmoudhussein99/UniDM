@@ -24,7 +24,18 @@ class UniDM():
                 cache_connection='unifdt.sqlite',
                 # stop_token='\n',
                 # temperature=args.temperature,
-                # max_tokens=args.max_tokens,
+                max_tokens=args.max_tokens,
+                top_p=1.0,
+                n=1,
+            )
+            self.manifest_dp = Manifest(
+                client_name = "huggingface",
+                client_connection = f"http://127.0.0.1:{args.local_model_port_dp}",
+                cache_name='sqlite',
+                cache_connection='unifdt.sqlite_dp',
+                # stop_token='\n',
+                # temperature=args.temperature,
+                max_tokens=args.max_tokens,
                 top_p=1.0,
                 n=1,
             )
@@ -46,6 +57,11 @@ class UniDM():
 
     def apply_prompt(self, prompt):
         res = self.manifest.run(prompt=prompt)
+        self.total_num_toks += len(prompt) // 4
+        time.sleep(TIMESLEEP)
+        return res
+    def apply_prompt_dp(self, prompt):
+        res = self.manifest_dp.run(prompt=prompt)
         self.total_num_toks += len(prompt) // 4
         time.sleep(TIMESLEEP)
         return res
