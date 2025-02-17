@@ -70,12 +70,17 @@ def parse_args() -> argparse.Namespace:
     
     parser.add_argument(
         "--use_chain_of_thoughts_llm",
-        help="Set metadata-wise component.",
+        help="use chain of thought with LLM backend module.",
         action="store_true"
     )    
     parser.add_argument(
         "--use_chain_of_thoughts_spacy",
-        help="Set metadata-wise component.",
+        help="use chain of thought with spacy backend module.",
+        action="store_true"
+    )    
+    parser.add_argument(
+        "--use_chain_of_thoughts_experimental",
+        help="use chain of thought with attribute segregation.",
         action="store_true"
     )    
     parser.add_argument(
@@ -99,6 +104,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--data_parsing",
         help="Set adaptive data parsing module.",
+        action="store_true"
+    )
+    
+    parser.add_argument(
+        "--clean_text",
+        help="Set clean_text to true",
         action="store_true"
     )
     parser.add_argument(

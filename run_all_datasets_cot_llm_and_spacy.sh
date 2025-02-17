@@ -8,7 +8,8 @@
 conda activate unidm-env
 
 # DATASETS=("WDC-Computers" )
-DATASETS=( "WDC-Shoes" "WDC-Watches" "WDC-Cameras" "MusicBrainz20k" "DBLP-GoogleScholar")
+DATASETS=("WDC-Shoes"  "WDC-Cameras" "MusicBrainz20k" )
+# DATASETS=("WDC-Shoes" "WDC-Watches" "DBLP-GoogleScholar")
 # "DBLP-GoogleScholar" "MusicBrainz20k"
 for DATASET in "${DATASETS[@]}"
 do
@@ -18,15 +19,16 @@ do
     --use_local_model \
     --data_dir dataset/datasets/entity_matching/structured/$DATASET \
     --task entity_resolution \
+    --seed 42 \
     --instance_num 3 \
     --context_num 3 \
-    --seed 42 \
     --metadata_wise \
     --instance_wise \
+    --clean_text \
+    --use_chain_of_thoughts_llm \
     --prompt_engineering
     # --data_parsing \
     # --use_chain_of_thoughts_experimental \
-    # --use_chain_of_thoughts_llm \
     # --max_tokens 100 \
     # --use_chain_of_thoughts_spacy \
 

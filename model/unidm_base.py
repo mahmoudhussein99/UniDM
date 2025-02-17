@@ -15,13 +15,14 @@ class UniDM():
         self.metadata_wise = args.metadata_wise
         self.Data_Parsing = args.data_parsing
         self.Prompt_Engineering = args.prompt_engineering
+        self.seed=args.seed
         self.logger = logger
         if args.use_local_model:
             self.manifest = Manifest(
                 client_name = "huggingface",
                 client_connection = f"http://127.0.0.1:{args.local_model_port}",
                 cache_name='sqlite',
-                cache_connection='unifdt.sqlite',
+                cache_connection=f'unifdt.sqlite_{args.local_model_port}',
                 # stop_token='\n',
                 # temperature=args.temperature,
                 max_tokens=args.max_tokens,
@@ -32,7 +33,7 @@ class UniDM():
                 client_name = "huggingface",
                 client_connection = f"http://127.0.0.1:{args.local_model_port_dp}",
                 cache_name='sqlite',
-                cache_connection='unifdt.sqlite_dp',
+                cache_connection=f'unifdt.sqlite_dp_{args.local_model_port}',
                 # stop_token='\n',
                 # temperature=args.temperature,
                 max_tokens=args.max_tokens,
